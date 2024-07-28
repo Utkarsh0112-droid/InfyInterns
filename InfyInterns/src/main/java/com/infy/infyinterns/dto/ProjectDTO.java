@@ -2,18 +2,24 @@ package com.infy.infyinterns.dto;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.NotNull;
+
 
 
 public class ProjectDTO {
 
 	private Integer projectId;
 	
+	@NotNull(message = "{project.projectname.absent}")
 	private String projectName;
 	
+	@NotNull(message = "{project.ideaowner.absent}")
 	private Integer ideaOwner;
 	
+	@NotNull(message = "{project.releasedate.absent}")
 	private LocalDate releaseDate;
 	
+	@NotNull(message = "{project.mentor.absent}")
 	private MentorDTO mentorDTO;
 
 	public ProjectDTO() {

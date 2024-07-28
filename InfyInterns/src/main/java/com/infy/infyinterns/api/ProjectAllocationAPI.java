@@ -3,13 +3,21 @@ package com.infy.infyinterns.api;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.infy.infyinterns.dto.MentorDTO;
 import com.infy.infyinterns.dto.ProjectDTO;
 import com.infy.infyinterns.exception.InfyInternException;
 
+@RestController
 public class ProjectAllocationAPI
 {
+	@GetMapping(path="hello")
+	public String Hello() {
+		return "Hello World";
+	}
 
     // add new project along with mentor details
     public ResponseEntity<String> allocateProject(ProjectDTO project) throws InfyInternException

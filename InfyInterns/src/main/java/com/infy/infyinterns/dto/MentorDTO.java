@@ -1,7 +1,12 @@
 package com.infy.infyinterns.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+
 public class MentorDTO {
 
+	@NotNull(message = "{mentor.mentorid.absent}")
+	@Pattern(regexp = "\\d{4}", message = "{mentor.mentorid.invalid}")
 	private Integer mentorId;
 	private String mentorName;
 	private Integer numberOfProjectsMentored;
