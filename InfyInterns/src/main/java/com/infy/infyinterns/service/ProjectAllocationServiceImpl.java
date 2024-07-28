@@ -66,11 +66,9 @@ public class ProjectAllocationServiceImpl implements ProjectAllocationService {
 		}
 		List<MentorDTO> mentorDTO = new ArrayList<>();
 		for(Mentor mentor : mentorlist) {
-			
+			mentorDTO.add(createDTO(mentor));
 		}
-		
-		
-		return null;
+		return mentorDTO;
 	}
 
 	@Override
