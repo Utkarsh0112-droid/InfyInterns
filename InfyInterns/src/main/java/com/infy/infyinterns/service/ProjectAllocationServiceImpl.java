@@ -73,12 +73,45 @@ public class ProjectAllocationServiceImpl implements ProjectAllocationService {
 
 	@Override
 	public void updateProjectMentor(Integer projectId, Integer mentorId) throws InfyInternException {
-
-	}
+		Optional<Mentor> optional = mentorRepo.findById(mentorId);
+		if(optional.isEmpty()) {
+			throw new InfyInternException("Service.MENTOR_NOT_FOUND");
+		}
+		Mentor mentor = optional.get();
+		if(mentor.getNumberOfProjectsMentored()>=3) {
+			throw new InfyInternException("Service.CANNOT_ALLOCATE_PROJECT");
+		}
+		Optional<Project> opProject = projectRepo.findById(projectId);
+		Mentor oldMentor = opProject.get().getMentor();
+		if(opProject.isEmpty()) {
+			throw new InfyInternException("Service.PROJECT_NOT_FOUND");
+		}
+		Project project = opProject.get();
+		project.setMentor(mentor);
+		mentor.setNumberOfProjectsMentored(mentor.getNumberOfProjectsMentored()+1);
+		mentorRepo.save(mentor);
+		// TODO 
+		// Deaalocating from previous mentor.
+		oldMentor.setNumberOfProjectsMentored(oldMentor.getNumberOfProjectsMentored()-1);
+		mentorRepo.save(oldMentor);
+		
+		}
 
 	@Override
 	public void deleteProject(Integer projectId) throws InfyInternException {
-
+		Project project = projectRepo.findById(projectId).orElseThrow(
+				()-> new InfyInternException("Service.PROJECT_NOT_FOUND"));
+		if(project.getMentor()!=null) {
+			Mentor mentor = project.getMentor();
+			mentor.setNumberOfProjectsMentored(mentor.getNumberOfProjectsMentored()-1);
+			project.setMentor(null);
+			mentorRepo.save(mentor);
+		}
+		
+		projectRepo.deleteById(projectId);
+		
+		
+		
 	}
 	
 	private MentorDTO createDTO(Mentor mentor) {
