@@ -97,17 +97,22 @@ public class ProjectAllocationServiceImpl implements ProjectAllocationService {
 		
 		}
 
+	//This method is used to delete the project details only and not the mentor who is allocated the project.
 	@Override
 	public void deleteProject(Integer projectId) throws InfyInternException {
+		//Invoke appropriate method of ProjectRepository which will retrieve the project details using the given projectId.
+		//If the retrieved project does not exist, then throw an object of InfyInternException with message “Service.PROJECT_NOT_FOUND”
 		Project project = projectRepo.findById(projectId).orElseThrow(
 				()-> new InfyInternException("Service.PROJECT_NOT_FOUND"));
+		//If the project is allocated to a mentor, then deallocate the project from the mentor and delete the project only.
+		//Also, the numberOfProjectsMentored of the corresponding mentor must be decremented by 1.
 		if(project.getMentor()!=null) {
 			Mentor mentor = project.getMentor();
 			mentor.setNumberOfProjectsMentored(mentor.getNumberOfProjectsMentored()-1);
 			project.setMentor(null);
 			mentorRepo.save(mentor);
 		}
-		
+		//If the project is not allocated to any mentor, then delete the project details by invoking appropriate method of ProjectRepository.
 		projectRepo.deleteById(projectId);
 		
 		
