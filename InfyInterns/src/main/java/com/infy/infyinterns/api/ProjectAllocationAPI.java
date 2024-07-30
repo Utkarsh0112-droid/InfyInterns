@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,14 +60,19 @@ public class ProjectAllocationAPI
     public ResponseEntity<String> updateProjectMentor( @PathVariable Integer projectId,
 						     @PathVariable @Valid Integer mentorId) throws InfyInternException
     {
+    	projectAllocationService.updateProjectMentor(projectId, mentorId);
+    	String successMessage = environment.getProperty(" API.PROJECT_UPDATE_SUCCESS ");
     	
-	return null;
+	return new ResponseEntity<>(successMessage,HttpStatus.OK) ;
     }
 
     // delete a project
+	@DeleteMapping("project/{ projectId }")
     public ResponseEntity<String> deleteProject(Integer projectId) throws InfyInternException
     {
-	return null;
+		projectAllocationService.deleteProject(projectId);
+		String successMessage = environment.getProperty("API.PROJECT_DELETE _SUCCESS");
+	return new ResponseEntity<>(successMessage,HttpStatus.OK);
     }
 
 }
