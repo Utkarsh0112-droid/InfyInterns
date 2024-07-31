@@ -1,8 +1,12 @@
 package com.infy.infyinterns.dto;
 
+import org.springframework.validation.annotation.Validated;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
+
+@Validated
 public class MentorDTO {
 
 	@NotNull(message = "{mentor.mentorid.absent}")

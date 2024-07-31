@@ -26,7 +26,7 @@ import jakarta.validation.Valid;
 @RequestMapping("/infyinterns")
 public class ProjectAllocationAPI
 {
-	@GetMapping(path="hello")
+	@GetMapping(path="/hello")
 	public String Hello() {
 		return "Hello World";
 	}
@@ -56,7 +56,7 @@ public class ProjectAllocationAPI
     }
 
     // update the mentor of a project
-	@PutMapping("project/{ projectId }/{ mentorId }")
+	@PutMapping("project/{projectId}/{mentorId}")
     public ResponseEntity<String> updateProjectMentor( @PathVariable Integer projectId,
 						     @PathVariable @Valid Integer mentorId) throws InfyInternException
     {
@@ -67,8 +67,8 @@ public class ProjectAllocationAPI
     }
 
     // delete a project
-	@DeleteMapping("project/{ projectId }")
-    public ResponseEntity<String> deleteProject(Integer projectId) throws InfyInternException
+	@DeleteMapping("project/{projectId}")
+    public ResponseEntity<String> deleteProject(@PathVariable Integer projectId) throws InfyInternException
     {
 		projectAllocationService.deleteProject(projectId);
 		String successMessage = environment.getProperty("API.PROJECT_DELETE _SUCCESS");
