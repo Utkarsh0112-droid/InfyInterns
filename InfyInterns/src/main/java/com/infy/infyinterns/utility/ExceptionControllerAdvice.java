@@ -2,27 +2,34 @@ package com.infy.infyinterns.utility;
 
 import java.util.stream.Collectors;
 
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.ConstraintViolationException;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.infy.infyinterns.exception.InfyInternException;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+
+
+@RestControllerAdvice
 public class ExceptionControllerAdvice
 {
 
     private static final Log LOGGER = LogFactory.getLog(ExceptionControllerAdvice.class);
 
+    @Autowired
     private Environment environment;
 
     // add appropriate annotation
+    @ExceptionHandler(InfyInternException.class)
     public ResponseEntity<ErrorInfo> meetingSchedulerExceptionHandler(InfyInternException exception)
     {
 	LOGGER.error(exception.getMessage(), exception);
@@ -33,6 +40,7 @@ public class ExceptionControllerAdvice
     }
 
     // add appropriate annotation
+    @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorInfo> generalExceptionHandler(Exception exception)
     {
 	LOGGER.error(exception.getMessage(), exception);
@@ -44,6 +52,7 @@ public class ExceptionControllerAdvice
     }
 
     // add appropriate annotation
+    @ExceptionHandler({MethodArgumentNotValidException.class , ConstraintViolationException.class})
     public ResponseEntity<ErrorInfo> validatorExceptionHandler(Exception exception)
     {
 	LOGGER.error(exception.getMessage(), exception);
